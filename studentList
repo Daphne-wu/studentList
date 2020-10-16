@@ -1,0 +1,145 @@
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <iomanip>
+
+using namespace std;
+
+//create student struct
+struct Student {
+	char* firstname;
+	char* lastname;
+	int id;
+	float gpa;
+};
+
+//function prototypes
+void addStudent(vector<Student*>*);
+void printStudent(vector<Student*>* studentlist);
+void deleteStudent(vector<Student*>* studentlist);
+string runprogram();
+
+
+int main() {
+	//set variables
+	string input;
+	bool validinput = false;
+	bool running = true;
+	bool keepadding = true;
+	string answer;
+	vector<Student*>* list = new vector<Student*>(); 
+
+//while the program is still running do the following
+	while (running == true) {
+		//tell user the commands
+		cout << "What would you like to do?" << endl;
+		cout << "Type 'ADD' to create a new entry for a student." << endl;
+		cout << "Type 'PRINT' to print out all the students currently stored." << endl;
+		cout << "Type 'DELETE' to delete a student." << endl;
+		cout << "Type 'QUIT' to exit." << endl;
+		cin >> input;
+		validinput = false;
+
+		//ensure that there is the correct input otherwise re ask
+		while (input != "ADD" && input != "PRINT" && input != "QUIT" && input != "DELETE" ) {
+			cout << "Invalid input of " << input << ", please try again." << endl;
+			cin >> input;
+		}
+
+//determine what to do depending on the input
+		if (input == "ADD") {
+			keepadding = true;
+			//if the user wants to keep adding, ask again and do again while makig sure the input is valid
+			while (keepadding == true) {
+				addStudent(list);
+				cout << "Would you like to add another student? Yes or no." << endl;
+				cin >> answer;
+		  		
+					if (answer == "yes" || answer == "Yes" || answer == "YES" || answer == "y" || answer == "Y"){
+						keepadding = true;
+					}
+					else if (answer == "no" || answer == "No" || answer == "NO" || answer == "n" || answer == "N") {
+						keepadding = false;
+						
+					}
+			
+			}
+		}
+		else if (input == "PRINT") {
+			printStudent(list);
+		}
+		else if (input == "DELETE") {
+			deleteStudent(list);
+		}
+		else if (input == "QUIT") {
+			cout << "Thanks!" << endl;
+			running = false;
+		}
+		else {
+			cout << "turd" << endl;
+		}
+		
+	}
+  return 0;
+}
+
+//function to add student 
+void addStudent(vector<Student*>* paramlist) {
+  Student* newstudent = new Student();
+  newstudent->firstname = new char[80];
+  newstudent->lastname = new char[80];
+  cout << "Enter first name" << endl;
+  cin >> newstudent->firstname;
+  cout << "Enter last name" << endl;
+  cin >> newstudent->lastname;
+  cout << "Enter id number" << endl;
+  cin >> newstudent->id;
+  cout << "Enter GPA" << endl;
+  cin >> newstudent->gpa;
+  paramlist->push_back(newstudent);
+  return;
+}
+
+//function to print student 
+void printStudent(vector<Student*>* studentlist) {
+	cout << "Students currently stored: " << endl;
+	for (vector<Student*>::iterator it = studentlist->begin(); it != studentlist->end(); ++it){
+		cout << studentlist->at(0)->firstname << " " << studentlist->at(0)->lastname << " " << studentlist->at(0)->id << " " << fixed << setprecision(2) << studentlist->at(0)->gpa << endl;
+
+	}
+}
+
+//function to delete student 
+void deleteStudent(vector<Student*>* studentlist) {
+	int id;
+	cout << "Enter id number of student: " << endl;
+	cin >> id;
+	int i = 0;
+	cout << "the id to delete is: " << id << endl;
+	for (vector<Student*>::iterator it = studentlist->begin(); it != studentlist->end(); ++it){
+		cout << "student at " << i << " is named " << studentlist->at(i)->firstname << " and has an id of " << studentlist->at(i)->id << endl;
+		if(studentlist->at(i)->id == id){
+			cout << "made it to here" << endl;
+			delete *it;
+			cout << "and to here" << endl;
+			it = studentlist->erase(studentlist->begin()+i);
+			cout << "also to here" << endl;
+			break;
+		}
+		i++;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
